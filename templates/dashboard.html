@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="text-white mb-4">Financial Overview</h2>
+
+<form method="GET" class="row mb-4 align-items-center">
+
+    {% set months = [
+        "January","February","March","April","May","June",
+        "July","August","September","October","November","December"
+    ] %}
+
+    <div class="col-md-2 mb-2">
+        <a href="{{ url_for('dashboard',
+            month=selected_month-1 if selected_month>1 else 12,
+            year=selected_year if selected_month>1 else selected_year-1) }}"
+           class="btn btn-outline-light w-100">
+           ⬅ Prev
+        </a>
+    </div>
+
+    <div class="col-md-3 mb-2">
+        <select name="month" class="form-select">
+            {% for i in range(12) %}
+            <option value="{{ i+1 }}"
+                {% if selected_month == i+1 %}selected{% endif %}>
+                {{ months[i] }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <select name="year" class="form-select">
+            {% for y in range(2023, 2031) %}
+            <option value="{{ y }}"
+                {% if y == selected_year %}selected{% endif %}>
+                {{ y }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <button class="btn btn-light w-100">
+            Apply
+        </button>
+    </div>
+
+    <div class="col-md-2 mb-2">
+        <a href="{{ url_for('dashboard',
+            month=selected_month+1 if selected_month<12 else 1,
+            year=selected_year if selected_month<12 else selected_year+1) }}"
+           class="btn btn-outline-light w-100">
+           Next ➡
+        </a>
+    </div>
+
+</form>
+
+<div class="row text-center">
+
+    <div class="col-md-4 mb-3">
+        <div class="glass-card">
+            <h6>Total Spent</h6>
+            <h2>{{ total }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="glass-card">
+            <h6>Budget</h6>
+            <h2>{{ budget }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="glass-card">
+            <h6>Remaining</h6>
+            <h2>{{ remaining }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="progress mt-4 mb-4">
+    <div class="progress-bar bg-warning"
+         style="width: {{ percentage }}%">
+        {{ percentage|round(1) }}%
+    </div>
+</div>
+
+<hr class="text-white">
+
+<h4 class="text-white text-center">Spending Distribution</h4>
+
+{% if labels|length > 0 %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div style="height:350px; max-width:600px; margin:auto;">
+    <canvas id="pieChart"></canvas>
+</div>
+
+<script>
+const labels = {{ labels|tojson }};
+const values = {{ values|tojson }};
+
+new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: values,
+            backgroundColor: [
+                '#ff6384','#36a2eb','#ffcd56',
+                '#4bc0c0','#9966ff','#ff9f40'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+
+{% else %}
+<p class="text-white text-center">No data for selected month.</p>
+{% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    setSeasonVideo({{ selected_month }});
+});
+</script>
+
+
+
+{% endblock %}

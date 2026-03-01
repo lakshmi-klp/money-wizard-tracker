@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Money Wizard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: transparent !important;
+            overflow-x: hidden;
+        }
+
+        /* VIDEO BACKGROUND */
+        #bgVideo {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 230px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding-top: 30px;
+            color: white;
+            z-index: 3;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 230px;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* TOP RIGHT PROFILE */
+        .top-profile {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .top-profile img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .top-profile span {
+            color: white;
+            font-weight: 500;
+        }
+
+        /* GLASS CARD */
+        .glass-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* FLOATING BACK BUTTON */
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 5;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 180px; }
+            .main-content { margin-left: 180px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKGROUND -->
+<video autoplay muted loop playsinline id="bgVideo"></video>
+<div class="overlay"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h4>🧙 Money Wizard</h4>
+    <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+    <a href="{{ url_for('add_expense') }}">➕ Add Expense</a>
+    <a href="{{ url_for('logout') }}">🚪 Logout</a>
+</div>
+
+<!-- TOP RIGHT PROFILE -->
+{% if current_user.is_authenticated %}
+<div class="top-profile" onclick="window.location='{{ url_for('profile') }}'">
+    <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}">
+    <span>{{ current_user.username }}</span>
+</div>
+{% endif %}
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- BACK BUTTON -->
+<button class="btn btn-light back-btn" onclick="history.back()">⬅ Back</button>
+
+<script>
+function setSeasonVideo(month) {
+    const video = document.getElementById("bgVideo");
+
+    if (month == 12 || month == 1 || month == 2) {
+        video.src = "{{ url_for('static', filename='videos/winter.mp4') }}";
+    }
+    else if (month >= 3 && month <= 6) {
+        video.src = "{{ url_for('static', filename='videos/summer.mp4') }}";
+    }
+    else {
+        video.src = "{{ url_for('static', filename='videos/rainy.mp4') }}";
+    }
+
+    video.load();
+}
+</script>
+
+</body>
+</html>

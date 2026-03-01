@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Add Expense</h3>
+
+<form method="POST">
+    <div class="mb-3">
+        <input name="amount"
+               type="number"
+               step="0.01"
+               class="form-control"
+               placeholder="Amount"
+               required>
+    </div>
+
+   <div class="mb-3">
+    <select name="category" class="form-select" required>
+        <option value="" disabled selected>Select Category</option>
+
+        <option>Auto / Transport</option>
+        <option>Baby Care</option>
+        <option>Bank Charges</option>
+        <option>Beauty & Salon</option>
+        <option>Books</option>
+        <option>Charity</option>
+        <option>Clothing</option>
+        <option>Dining Out</option>
+        <option>Education</option>
+        <option>Electricity Bill</option>
+        <option>EMI / Loans</option>
+        <option>Entertainment</option>
+        <option>Family Expenses</option>
+        <option>Fuel</option>
+        <option>Gifts</option>
+        <option>Groceries</option>
+        <option>Gym / Fitness</option>
+        <option>Healthcare</option>
+        <option>Home Maintenance</option>
+        <option>Insurance</option>
+        <option>Internet Bill</option>
+        <option>Investment</option>
+        <option>Medical</option>
+        <option>Mobile Recharge</option>
+        <option>Pets</option>
+        <option>Rent</option>
+        <option>Savings</option>
+        <option>Shopping</option>
+        <option>Subscriptions</option>
+        <option>Travel</option>
+        <option>Water Bill</option>
+        <option>Other</option>
+    </select>
+</div>
+
+    <button type="submit" class="btn btn-primary">
+        Add Expense
+    </button>
+</form>
+
+
+{% endblock %}

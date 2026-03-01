@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3 class="text-white mb-3">Register</h3>
+
+<div class="glass-card" style="max-width:400px;">
+
+<form method="POST">
+    <input name="username" class="form-control mb-2" placeholder="Username" required>
+    <input name="email" type="email" class="form-control mb-2" placeholder="Email" required>
+    <input name="password" type="password" class="form-control mb-2" placeholder="Password" required>
+    <button class="btn btn-primary w-100">Register</button>
+</form>
+
+{% if error %}
+    <div class="mt-3 text-danger">
+        {{ error }}
+    </div>
+{% endif %}
+
+{% if show_login %}
+    <div class="mt-2">
+        <a href="{{ url_for('login') }}" class="btn btn-success w-100">
+            🔐 Go to Login
+        </a>
+    </div>
+{% endif %}
+
+<div class="mt-3 text-white">
+    Already have account?
+    <a href="{{ url_for('login') }}">Login</a>
+</div>
+
+</div>
+
+{% endblock %}
