@@ -33,8 +33,8 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'l72727663@gmail.com'
-app.config['MAIL_PASSWORD'] = 'yugd amse lfpa uihk'
-
+import os
+app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
 mail = Mail(app)
 
 otp_store = {}
