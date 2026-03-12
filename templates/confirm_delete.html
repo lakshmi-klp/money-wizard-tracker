@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="delete-container">
+
+<div class="delete-card">
+
+<h1>Verify Account Deletion</h1>
+
+<p>Enter the verification code sent to your email.</p>
+
+<form method="POST">
+
+<input 
+type="text" 
+name="otp" 
+placeholder="Enter OTP"
+class="form-control otp-input"
+required
+>
+
+<button class="btn btn-danger mt-3">
+Confirm Delete
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<style>
+
+.delete-container{
+height:80vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.delete-card{
+background:rgba(0,0,0,0.6);
+padding:40px;
+border-radius:15px;
+text-align:center;
+backdrop-filter:blur(10px);
+color:white;
+width:420px;
+}
+
+.delete-card h1{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.delete-card p{
+font-size:18px;
+margin-bottom:20px;
+color:#ddd;
+}
+
+.otp-input{
+text-align:center;
+font-size:18px;
+}
+
+</style>
+
+{% endblock %}

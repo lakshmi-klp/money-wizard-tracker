@@ -1,61 +1,345 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>Add Expense</h3>
+<h2 class="text-danger mb-4">Add Expense</h2>
 
 <form method="POST">
-    <div class="mb-3">
-        <input name="amount"
-               type="number"
-               step="0.01"
-               class="form-control"
-               placeholder="Amount"
-               required>
-    </div>
 
-   <div class="mb-3">
-    <select name="category" class="form-select" required>
-        <option value="" disabled selected>Select Category</option>
+<!-- Amount -->
+<input type="number" step="0.01" name="amount" class="form-control mb-4" placeholder="Amount" required>
 
-        <option>Auto / Transport</option>
-        <option>Baby Care</option>
-        <option>Bank Charges</option>
-        <option>Beauty & Salon</option>
-        <option>Books</option>
-        <option>Charity</option>
-        <option>Clothing</option>
-        <option>Dining Out</option>
-        <option>Education</option>
-        <option>Electricity Bill</option>
-        <option>EMI / Loans</option>
-        <option>Entertainment</option>
-        <option>Family Expenses</option>
-        <option>Fuel</option>
-        <option>Gifts</option>
-        <option>Groceries</option>
-        <option>Gym / Fitness</option>
-        <option>Healthcare</option>
-        <option>Home Maintenance</option>
-        <option>Insurance</option>
-        <option>Internet Bill</option>
-        <option>Investment</option>
-        <option>Medical</option>
-        <option>Mobile Recharge</option>
-        <option>Pets</option>
-        <option>Rent</option>
-        <option>Savings</option>
-        <option>Shopping</option>
-        <option>Subscriptions</option>
-        <option>Travel</option>
-        <option>Water Bill</option>
-        <option>Other</option>
-    </select>
+<h5 class="text-white mb-3">Select Category</h5>
+
+<div class="category-grid">
+
+<!-- 1 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Food" required>
+<span class="material-icons">restaurant</span>
+<p>Food</p>
+</label>
+
+<!-- 2 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Groceries">
+<span class="material-icons">shopping_basket</span>
+<p>Groceries</p>
+</label>
+
+<!-- 3 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Shopping">
+<span class="material-icons">shopping_cart</span>
+<p>Shopping</p>
+</label>
+
+<!-- 4 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Travel">
+<span class="material-icons">flight</span>
+<p>Travel</p>
+</label>
+
+<!-- 5 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Fuel">
+<span class="material-icons">local_gas_station</span>
+<p>Fuel</p>
+</label>
+
+<!-- 6 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Transport">
+<span class="material-icons">directions_bus</span>
+<p>Transport</p>
+</label>
+
+<!-- 7 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Car">
+<span class="material-icons">directions_car</span>
+<p>Car</p>
+</label>
+
+<!-- 8 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Education">
+<span class="material-icons">school</span>
+<p>Education</p>
+</label>
+
+<!-- 9 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Books">
+<span class="material-icons">menu_book</span>
+<p>Books</p>
+</label>
+
+<!-- 10 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Gym">
+<span class="material-icons">fitness_center</span>
+<p>Gym</p>
+</label>
+
+<!-- 11 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Health">
+<span class="material-icons">health_and_safety</span>
+<p>Health</p>
+</label>
+
+<!-- 12 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Medicine">
+<span class="material-icons">medical_services</span>
+<p>Medicine</p>
+</label>
+
+<!-- 13 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Clothing">
+<span class="material-icons">checkroom</span>
+<p>Clothing</p>
+</label>
+
+<!-- 14 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Beauty">
+<span class="material-icons">face</span>
+<p>Beauty</p>
+</label>
+
+<!-- 15 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Entertainment">
+<span class="material-icons">movie</span>
+<p>Entertainment</p>
+</label>
+
+<!-- 16 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Music">
+<span class="material-icons">music_note</span>
+<p>Music</p>
+</label>
+
+<!-- 17 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Games">
+<span class="material-icons">sports_esports</span>
+<p>Games</p>
+</label>
+
+<!-- 18 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Mobile">
+<span class="material-icons">smartphone</span>
+<p>Mobile</p>
+</label>
+
+<!-- 19 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Internet">
+<span class="material-icons">wifi</span>
+<p>Internet</p>
+</label>
+
+<!-- 20 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Electricity">
+<span class="material-icons">bolt</span>
+<p>Electricity</p>
+</label>
+
+<!-- 21 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Water">
+<span class="material-icons">water_drop</span>
+<p>Water</p>
+</label>
+
+<!-- 22 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Rent">
+<span class="material-icons">home</span>
+<p>Rent</p>
+</label>
+
+<!-- 23 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Home">
+<span class="material-icons">house</span>
+<p>Home</p>
+</label>
+
+<!-- 24 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Furniture">
+<span class="material-icons">weekend</span>
+<p>Furniture</p>
+</label>
+
+<!-- 25 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Repair">
+<span class="material-icons">build</span>
+<p>Repair</p>
+</label>
+
+<!-- 26 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Pet">
+<span class="material-icons">pets</span>
+<p>Pet</p>
+</label>
+
+<!-- 27 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Kids">
+<span class="material-icons">child_care</span>
+<p>Kids</p>
+</label>
+
+<!-- 28 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Gift">
+<span class="material-icons">card_giftcard</span>
+<p>Gift</p>
+</label>
+
+<!-- 29 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Charity">
+<span class="material-icons">volunteer_activism</span>
+<p>Charity</p>
+</label>
+
+<!-- 30 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Investment">
+<span class="material-icons">trending_up</span>
+<p>Investment</p>
+</label>
+
+<!-- 31 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Savings">
+<span class="material-icons">savings</span>
+<p>Savings</p>
+</label>
+
+<!-- 32 -->
+<label class="cat-item">
+<input type="radio" name="category" value="EMI">
+<span class="material-icons">account_balance</span>
+<p>EMI</p>
+</label>
+
+<!-- 33 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Bank">
+<span class="material-icons">account_balance_wallet</span>
+<p>Bank</p>
+</label>
+
+<!-- 34 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Taxes">
+<span class="material-icons">receipt_long</span>
+<p>Taxes</p>
+</label>
+
+<!-- 35 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Insurance">
+<span class="material-icons">security</span>
+<p>Insurance</p>
+</label>
+
+<!-- 36 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Snacks">
+<span class="material-icons">fastfood</span>
+<p>Snacks</p>
+</label>
+
+<!-- 37 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Coffee">
+<span class="material-icons">coffee</span>
+<p>Coffee</p>
+</label>
+
+<!-- 38 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Alcohol">
+<span class="material-icons">wine_bar</span>
+<p>Alcohol</p>
+</label>
+
+<!-- 39 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Lottery">
+<span class="material-icons">casino</span>
+<p>Lottery</p>
+</label>
+
+<!-- 40 -->
+<label class="cat-item">
+<input type="radio" name="category" value="Other">
+<span class="material-icons">category</span>
+<p>Other</p>
+</label>
+
 </div>
 
-    <button type="submit" class="btn btn-primary">
-        Add Expense
-    </button>
+<button class="btn btn-danger w-100 mt-4">Add Expense</button>
+
 </form>
 
+<style>
+
+.category-grid{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:18px;
+}
+
+.cat-item{
+text-align:center;
+padding:14px;
+border-radius:12px;
+background:rgba(255,255,255,0.1);
+cursor:pointer;
+transition:0.3s;
+}
+
+.cat-item input{
+display:none;
+}
+
+.cat-item .material-icons{
+font-size:36px;
+color:white;
+display:block;
+margin-bottom:5px;
+}
+
+.cat-item p{
+color:white;
+font-size:13px;
+}
+
+.cat-item:hover{
+background:rgba(255,255,255,0.25);
+transform:scale(1.05);
+}
+
+.cat-item input:checked + .material-icons{
+color:#ff4d4d;
+}
+
+</style>
 
 {% endblock %}

@@ -4,9 +4,15 @@
     <title>Money Wizard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- YOUR CSS FILE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <style>
+
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -33,7 +39,7 @@
         .overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,35);
             z-index: 1;
         }
 
@@ -104,14 +110,13 @@
 
         /* GLASS CARD */
         .glass-card {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(15px);
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             color: white;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        }
-
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
         /* FLOATING BACK BUTTON */
         .back-btn {
             position: fixed;
@@ -124,55 +129,92 @@
             .sidebar { width: 180px; }
             .main-content { margin-left: 180px; }
         }
+
     </style>
 </head>
 
 <body>
 
 <!-- VIDEO BACKGROUND -->
-<video autoplay muted loop playsinline id="bgVideo"></video>
+<video autoplay muted loop playsinline id="bgVideo">
+    <source src="{{ url_for('static', filename='videos/main.mp4') }}" type="video/mp4">
+</video>
+
 <div class="overlay"></div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
     <h4>🧙 Money Wizard</h4>
+
     <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+
     <a href="{{ url_for('add_expense') }}">➕ Add Expense</a>
+
     <a href="{{ url_for('logout') }}">🚪 Logout</a>
+
 </div>
 
 <!-- TOP RIGHT PROFILE -->
 {% if current_user.is_authenticated %}
-<div class="top-profile" onclick="window.location='{{ url_for('profile') }}'">
-    <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}">
-    <span>{{ current_user.username }}</span>
+
+<div class="top-profile"
+onclick="window.location='{{ url_for('profile') }}'">
+
+<img
+src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}">
+
+<span>{{ current_user.username }}</span>
+
 </div>
+
 {% endif %}
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
-    {% block content %}{% endblock %}
+
+{% block content %}{% endblock %}
+
 </div>
 
 <!-- BACK BUTTON -->
-<button class="btn btn-light back-btn" onclick="history.back()">⬅ Back</button>
+<button class="btn btn-light back-btn" onclick="history.back()">
+⬅ Back
+</button>
 
 <script>
-function setSeasonVideo(month) {
+
+document.addEventListener("DOMContentLoaded", function() {
+
     const video = document.getElementById("bgVideo");
 
-    if (month == 12 || month == 1 || month == 2) {
-        video.src = "{{ url_for('static', filename='videos/winter.mp4') }}";
-    }
-    else if (month >= 3 && month <= 6) {
-        video.src = "{{ url_for('static', filename='videos/summer.mp4') }}";
-    }
-    else {
-        video.src = "{{ url_for('static', filename='videos/rainy.mp4') }}";
+    const path = window.location.pathname;
+
+    if(path.includes("dashboard")){
+
+        let month = Number("{{ selected_month | default(0) }}");
+
+        if(month === 12 || month === 1 || month === 2){
+            video.src = "/static/videos/winter.mp4";
+        }
+
+        else if(month >= 3 && month <= 5){
+            video.src = "/static/videos/summer.mp4";
+        }
+
+        else if(month >= 6 && month <= 9){
+            video.src = "/static/videos/rainy.mp4";
+        }
+
+        else{
+            video.src = "/static/videos/main.mp4";
+        }
+
+        video.load();
+
     }
 
-    video.load();
-}
+});
+
 </script>
 
 </body>

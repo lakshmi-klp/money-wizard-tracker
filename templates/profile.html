@@ -9,10 +9,10 @@
     <div id="viewMode">
 
         <div class="text-center mb-4">
-            <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
-                 width="120"
-                 height="120"
-                 style="border-radius:50%; object-fit:cover;">
+            <img 
+                class="profile-avatar"
+                    src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
+                alt="Profile Picture">
         </div>
 
         <div class="mb-3 text-white">
@@ -27,7 +27,7 @@
 
         <div class="mb-3 text-white">
             <strong>Monthly Budget:</strong><br>
-            {{ current_user.budget }}
+            {{ "{:,.2f}".format(current_user.budget) }}
         </div>
 
         <button class="btn btn-light w-100 mb-3"
@@ -86,10 +86,8 @@
 
     </div>
 
-    <form method="POST" action="{{ url_for('delete_account') }}">
-        <button class="btn btn-danger w-100">
-            🗑 Delete Account
-        </button>
+    <form method="POST" action="{{ url_for('request_delete_account') }}">
+        <button class="delete-btn">Delete Account</button>
     </form>
 
 </div>
