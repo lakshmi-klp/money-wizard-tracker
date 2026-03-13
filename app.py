@@ -206,10 +206,9 @@ def generate_pdf_report(user, expenses):
 
 def send_budget_alert(user, total):
 
-    expenses = Expense.query.filter_by(user_id=user.id).all()
-    pdf_buffer = generate_pdf_report(user, expenses)
-
     try:
+        expenses = Expense.query.filter_by(user_id=user.id).all()
+        pdf_buffer = generate_pdf_report(user, expenses)
 
         msg = Message(
             "⚠ Budget Limit Exceeded – Money Wizard",
@@ -226,6 +225,8 @@ Budget: ₹{user.budget}
 Spent: ₹{total}
 
 Please review the attached report.
+
+Money Wizard Team
 """
 
         msg.attach(
