@@ -66,7 +66,6 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 db = SQLAlchemy(app)
-db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
