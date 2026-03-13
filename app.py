@@ -32,8 +32,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'l72727663@gmail.com'
+# app.config['MAIL_USERNAME'] = 'l72727663@gmail.com'
+# app.config['MAIL_PASSWORD'] = 'yugd amse lfpa uihk'
 import os
+
+app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
 mail = Mail(app)
 
@@ -204,47 +207,37 @@ def generate_pdf_report(user, expenses):
 def send_budget_alert(user, total):
 
     expenses = Expense.query.filter_by(user_id=user.id).all()
-
     pdf_buffer = generate_pdf_report(user, expenses)
 
-    msg = Message(
-        "⚠ Budget Limit Exceeded – Money Wizard",
-        sender=app.config['MAIL_USERNAME'],
-        recipients=[user.email]
-    )
+    try:
 
-    msg.body = f"""
+        msg = Message(
+            "⚠ Budget Limit Exceeded – Money Wizard",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[user.email]
+        )
 
+        msg.body = f"""
 Hello {user.username},
 
-This is an automated notification from Money Wizard.
+Your monthly spending exceeded your budget.
 
-Our system detected that your current monthly spending has exceeded your predefined budget.
+Budget: ₹{user.budget}
+Spent: ₹{total}
 
-Budget Set: ₹{user.budget}
-Current Spending: ₹{total}
-
-To help you stay on track with your financial goals, we recommend reviewing your expenses and identifying categories where spending can be reduced.
-
-A detailed budget analysis report is attached to this email for your reference.
-
-Stay financially smart with Money Wizard.
-
-Regards,
-Money Wizard Team
-Smart Budget • Better Decisions
+Please review the attached report.
 """
 
-    msg.attach(
-    "budget_report.pdf",
-    "application/pdf",
-    pdf_buffer.read()
-)
+        msg.attach(
+            "budget_report.pdf",
+            "application/pdf",
+            pdf_buffer.read()
+        )
 
-try:
-    mail.send(msg)
-except Exception as e:
-    print("Email sending failed:", e)
+        mail.send(msg)
+
+    except Exception as e:
+        print("Email sending failed:", e)
 
 # ================= HOME =================
 
