@@ -27,8 +27,8 @@ app = Flask(__name__)
 # SECURITY CONFIG (Environment)
 # ==============================
 
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "devsecretkey")
 
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 # ==============================
 # DATABASE CONFIG
 # ==============================
