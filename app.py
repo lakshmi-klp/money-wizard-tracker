@@ -259,13 +259,15 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        # Check if user already exists
         existing_user = User.query.filter_by(email=email).first()
-
         if existing_user:
             return redirect(url_for('login'))
 
+        # Hash password
         hashed_password = generate_password_hash(password)
 
+        # Create new user
         new_user = User(
             username=username,
             email=email,
@@ -276,19 +278,21 @@ def register():
         db.session.commit()
 
         # ===== SEND OTP =====
-
         otp = random.randint(100000, 999999)
         otp_store[email] = otp
 
-        msg = Message(
-            "Money Wizard Email Verification",
-            sender=app.config['MAIL_USERNAME'],
-            recipients=[email]
-        )
+        try:
+            msg = Message(
+                "Money Wizard Email Verification",
+                sender=app.config['MAIL_USERNAME'],
+                recipients=[email]
+            )
 
-        msg.body = f"Your Money Wizard verification code is: {otp}"
+            msg.body = f"Your Money Wizard verification code is: {otp}"
+            mail.send(msg)
 
-        mail.send(msg)
+        except Exception as e:
+            print("Email failed:", e)
 
         return redirect(url_for('verify_email', email=email))
 
