@@ -241,7 +241,10 @@ Smart Budget • Better Decisions
     pdf_buffer.read()
 )
 
+try:
     mail.send(msg)
+except Exception as e:
+    print("Email sending failed:", e)
 
 # ================= HOME =================
 
