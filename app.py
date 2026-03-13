@@ -23,24 +23,39 @@ matplotlib.use('Agg')
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'supersecretkey'
+# ==============================
+# SECURITY CONFIG (Environment)
+# ==============================
+
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "devsecretkey")
+
+# ==============================
+# DATABASE CONFIG
+# ==============================
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///money_wizard.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# ================= MAIL CONFIG =================
+# ==============================
+# MAIL CONFIG (GMAIL SMTP)
+# ==============================
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_USERNAME'] = 'l72727663@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'yugd amse lfpa uihk'
-import os
-
 app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
-mail = Mail(app)
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get("MAIL_USERNAME")
 
-otp_store = {}
+# ==============================
+# INITIALIZE EXTENSIONS
+# ==============================
+
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+mail = Mail(app)
 
 # ================= FILE UPLOAD =================
 
@@ -279,7 +294,7 @@ def register():
 
         # ===== SEND OTP =====
         otp = random.randint(100000, 999999)
-        otp_store[email] = otp
+        otp_store = {}
 
         try:
             msg = Message(
