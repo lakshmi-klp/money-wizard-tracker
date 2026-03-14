@@ -311,10 +311,130 @@
 </div>
 {% endif %}
 
+<!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-container" id="flashContainer">
+    {% for category, message in messages %}
+    <div class="flash-msg flash-{{ category }}">
+        <span class="material-icons flash-icon">
+            {% if category == 'budget_alert' %}warning_amber
+            {% elif category == 'budget_warning' %}warning
+            {% elif category == 'success' %}check_circle
+            {% elif category == 'error' %}error
+            {% else %}info{% endif %}
+        </span>
+        <span class="flash-text">{{ message }}</span>
+        <button class="flash-close" onclick="this.parentElement.remove()">
+            <span class="material-icons" style="font-size:18px;">close</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
 <!-- MAIN CONTENT -->
 <div class="main-content">
     {% block content %}{% endblock %}
 </div>
+
+<style>
+    .flash-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 640px;
+        width: calc(100% - 40px);
+        pointer-events: none;
+    }
+
+    .flash-msg {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        animation: slideDown 0.3s ease;
+        pointer-events: all;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .flash-budget_alert, .flash-budget_warning {
+        background: rgba(234, 179, 8, 0.15);
+        border-color: rgba(234, 179, 8, 0.4);
+    }
+
+    .flash-budget_alert .flash-icon,
+    .flash-budget_warning .flash-icon { color: #facc15; }
+
+    .flash-success {
+        background: rgba(52, 211, 153, 0.12);
+        border-color: rgba(52, 211, 153, 0.35);
+    }
+
+    .flash-success .flash-icon { color: #34d399; }
+
+    .flash-error {
+        background: rgba(239, 68, 68, 0.12);
+        border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .flash-error .flash-icon { color: #f87171; }
+
+    .flash-info {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: rgba(99, 102, 241, 0.35);
+    }
+
+    .flash-info .flash-icon { color: #818cf8; }
+
+    .flash-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+
+    .flash-text {
+        flex: 1;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        color: rgba(255,255,255,0.92);
+        font-weight: 500;
+    }
+
+    .flash-close {
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.4);
+        cursor: pointer;
+        padding: 0;
+        flex-shrink: 0;
+        transition: color 0.2s;
+    }
+
+    .flash-close:hover { color: rgba(255,255,255,0.8); }
+</style>
+
+<script>
+    // Auto-dismiss flash messages after 8 seconds
+    setTimeout(function () {
+        const container = document.getElementById('flashContainer');
+        if (container) {
+            container.style.transition = 'opacity 0.5s ease';
+            container.style.opacity = '0';
+            setTimeout(() => container.remove(), 500);
+        }
+    }, 8000);
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
