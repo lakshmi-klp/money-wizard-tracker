@@ -417,6 +417,18 @@ def send_budget_alert(user, total):
         return False
 
 # ==============================
+# PWA SERVICE WORKER
+# ==============================
+
+@app.route('/sw.js')
+def service_worker():
+    response = make_response(
+        open(os.path.join(app.root_path, 'static', 'sw.js')).read()
+    )
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
 # HOME
 # ==============================
 
