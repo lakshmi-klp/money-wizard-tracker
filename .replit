@@ -12,6 +12,8 @@ packages = ["cairo", "ffmpeg-full", "freetype", "ghostscript", "glibcLocales", "
 SECRET_KEY = "eb35d8cb22297472a7e0faf84e89c3d1f081be56813390c7a97efa9283458c87"
 MAIL_USERNAME = "l72727663@gmail.com"
 MAIL_PASSWORD = "xzgn drfc dgri rldo"
+ADMIN_EMAIL = "l72727663@gmail.com"
+ADMIN_PASSWORD = "@lakshmi143"
 
 [workflows]
 runButton = "Project"

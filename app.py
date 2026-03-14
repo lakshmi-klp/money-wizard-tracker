@@ -182,7 +182,6 @@ def chart_monthly_trend(user_id, year):
     ax.set_xticklabels(month_names, fontsize=6.5, color=TEXT_COLOR, rotation=45)
     ax.tick_params(axis='y', colors=TEXT_COLOR, labelsize=7)
     ax.spines[['top','right']].set_visible(False)
-    ax.spines[['left','bottom']].set_color('rgba(255,255,255,0.2)')
     ax.spines['left'].set_color('#444')
     ax.spines['bottom'].set_color('#444')
     ax.yaxis.label.set_color(TEXT_COLOR)
