@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .error-wrap {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+</style>
+
+<div class="error-wrap">
+    <div>
+        <div style="font-size:4rem; margin-bottom:16px;">🚫</div>
+        <h2 style="font-size:2rem; font-weight:700; color:#f87171; margin-bottom:8px;">403 – Access Denied</h2>
+        <p style="color:rgba(255,255,255,0.5); margin-bottom:24px;">
+            You don't have permission to view this page.
+        </p>
+        <a href="{{ url_for('dashboard') }}"
+           style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+                  color:#fff; padding:10px 24px; border-radius:10px; text-decoration:none;
+                  font-weight:500; transition:all 0.2s;">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+
+{% endblock %}

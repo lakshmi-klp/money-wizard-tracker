@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login – Money Wizard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+
+        .admin-card {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 40px 36px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin: 20px;
+        }
+
+        .logo { text-align: center; margin-bottom: 28px; }
+        .logo .icon { font-size: 2.8rem; display: block; margin-bottom: 8px; }
+        .logo h2 { font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0 0 4px; }
+        .logo p { color: rgba(255,255,255,0.45); font-size: 0.82rem; margin: 0; }
+
+        .badge-admin {
+            display: inline-block;
+            background: rgba(239,68,68,0.2);
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #fca5a5;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .lbl {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .inp {
+            background: rgba(255,255,255,0.07) !important;
+            border: 1px solid rgba(255,255,255,0.14) !important;
+            border-radius: 10px !important;
+            color: #fff !important;
+            padding: 11px 14px !important;
+        }
+        .inp::placeholder { color: rgba(255,255,255,0.3) !important; }
+        .inp:focus {
+            background: rgba(255,255,255,0.11) !important;
+            border-color: rgba(239,68,68,0.5) !important;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.12) !important;
+            outline: none !important;
+            color: #fff !important;
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #dc2626, #9b1c1c);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fff;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(220,38,38,0.35);
+            margin-top: 6px;
+        }
+        .btn-admin:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(220,38,38,0.5); }
+
+        .alert-msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-error {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.35);
+            font-size: 0.82rem;
+            text-decoration: none;
+        }
+        .back-link:hover { color: rgba(255,255,255,0.6); }
+
+        .divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 22px 0; }
+    </style>
+</head>
+<body>
+    <div class="admin-card">
+        <div class="logo">
+            <span class="icon">🛡</span>
+            <h2>Money Wizard</h2>
+            <span class="badge-admin">Admin Portal</span>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+        <div class="alert-msg alert-{{ cat }}">
+            <span class="material-icons" style="font-size:18px;">error</span>
+            {{ msg }}
+        </div>
+        {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="lbl">Admin Email</label>
+                <input type="email" name="email" class="form-control inp"
+                       placeholder="admin@moneywizard.com"
+                       autocomplete="username" required>
+            </div>
+            <div class="mb-4">
+                <label class="lbl">Password</label>
+                <input type="password" name="password" class="form-control inp"
+                       placeholder="Enter admin password"
+                       autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn-admin">Sign In as Admin</button>
+        </form>
+
+        <hr class="divider">
+        <a href="{{ url_for('login') }}" class="back-link">← Back to user login</a>
+    </div>
+</body>
+</html>

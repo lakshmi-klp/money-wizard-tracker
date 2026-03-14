@@ -1,0 +1,225 @@
+I want to expand this application by introducing an Admin Login and Admin Dashboard system that allows the administrator to monitor application usage, user activity, and system analytics.
+
+The admin panel should be secure and accessible only to authorized administrators.
+
+ADMIN SYSTEM REQUIREMENTS
+
+Please implement the following features step by step.
+
+ADMIN USER ROLE
+
+Modify the existing User model to include a new field:
+
+is_admin (Boolean)
+
+This field determines whether a user is an administrator.
+
+Example:
+
+is_admin = db.Column(db.Boolean, default=False)
+
+Regular users should have is_admin = False, while administrators will have is_admin = True.
+
+The admin account can be manually created in the database or seeded automatically when the app starts.
+
+ADMIN LOGIN PAGE
+
+Create a separate admin login system.
+
+Admin login should be available at:
+
+/admin/login
+
+The admin login page should include:
+
+• email input
+• password input
+• login button
+
+It should not use the normal user login page.
+
+When the admin logs in successfully:
+
+• verify credentials
+• check is_admin == True
+• redirect to admin dashboard
+
+If a normal user attempts to login through the admin page, show an error message.
+
+ADMIN DASHBOARD
+
+Create a new page:
+
+/admin/dashboard
+
+Only accessible if the logged-in user is an administrator.
+
+This dashboard should show important system metrics including:
+
+TOTAL REGISTERED USERS
+Display the number of users registered in the system.
+
+ACTIVE USERS
+Track users who have logged in within the last 7 days.
+
+TOTAL EXPENSE RECORDS
+Count all expenses stored in the database.
+
+TOTAL REPORT DOWNLOADS
+Track how many times users download financial reports.
+
+NEW USERS THIS MONTH
+Display number of users registered during the current month.
+
+USER ANALYTICS TABLE
+
+Display a table on the admin dashboard showing:
+
+User ID
+Username
+Email
+Registration Date
+Last Login Date
+Total Expenses Recorded
+Total Reports Downloaded
+
+The table should allow sorting by:
+
+• newest users
+• most active users
+• highest number of expenses
+
+DOWNLOAD TRACKING SYSTEM
+
+Add a new field to track report downloads.
+
+Option 1:
+Add a column in the User model:
+
+reports_downloaded = db.Column(db.Integer, default=0)
+
+Every time a user downloads a report, increment this counter.
+
+Option 2:
+Create a new model called ReportDownload:
+
+ReportDownload
+
+id
+
+user_id
+
+timestamp
+
+Then count downloads per user.
+
+Either approach is acceptable, but the system must allow the admin dashboard to display download analytics.
+
+USER ACTIVITY TRACKING
+
+Add a new column to track user activity:
+
+last_login = db.Column(db.DateTime)
+
+Update this field whenever the user logs in successfully.
+
+Use this field to calculate:
+
+Active Users = users who logged in during last 7 days.
+
+ADMIN UI DESIGN
+
+The admin dashboard should match the application's dark theme.
+
+Design layout:
+
+ADMIN DASHBOARD
+
+Top Statistics Cards
+
+• Total Users
+• Active Users
+• Total Expenses
+• Total Downloads
+
+Below that:
+
+Charts section:
+
+User Growth Chart
+(show monthly registrations)
+
+Report Download Chart
+(show downloads over time)
+
+Below charts:
+
+User Activity Table
+
+Use simple charts if possible (Chart.js or matplotlib).
+
+ADMIN SIDEBAR MENU
+
+Add a sidebar for admin pages including:
+
+Admin Dashboard
+User Analytics
+Download Analytics
+Logout
+
+The admin interface should look professional but simple.
+
+ADMIN ACCESS PROTECTION
+
+All admin routes must be protected.
+
+Example:
+
+@app.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+
+if not current_user.is_admin:
+    abort(403)
+
+This ensures normal users cannot access admin pages.
+
+OPTIONAL FEATURES (IF POSSIBLE)
+
+If possible, add these enhancements:
+
+Search users by email
+Filter users by registration date
+Export user analytics as CSV
+Display most active users
+Display top spending users
+
+CODE STRUCTURE
+
+Keep the code clean and organized.
+
+Separate admin templates inside:
+
+templates/admin/
+
+Example:
+
+templates/admin/login.html
+templates/admin/dashboard.html
+templates/admin/users.html
+
+FINAL GOAL
+
+After implementing the admin system, the application should support:
+
+Normal users using the finance tracker
+Admin monitoring the platform usage
+
+The admin should be able to:
+
+See how many users are using the app
+See user activity
+See report download statistics
+Monitor growth of the application
+
+Make sure the new system integrates smoothly with the existing Flask app without breaking the current features.

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard – Money Wizard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1040 50%, #0a0a1a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            background: rgba(15,12,41,0.85);
+            backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .sb-brand {
+            padding: 26px 22px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .sb-brand h4 { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px; }
+        .sb-badge {
+            display: inline-block;
+            background: rgba(239,68,68,0.2);
+            border: 1px solid rgba(239,68,68,0.35);
+            color: #fca5a5;
+            font-size: 0.67rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 2px 9px;
+            border-radius: 20px;
+        }
+
+        .sb-nav { flex: 1; padding: 14px 10px; display: flex; flex-direction: column; gap: 3px; }
+        .sb-section-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.1px;
+            color: rgba(255,255,255,0.3);
+            padding: 8px 12px 4px;
+        }
+
+        .sb-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 13px;
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            border-radius: 9px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.18s ease;
+        }
+        .sb-nav a .material-icons { font-size: 19px; }
+        .sb-nav a:hover { background: rgba(255,255,255,0.09); color: #fff; }
+        .sb-nav a.active {
+            background: rgba(220,38,38,0.18);
+            color: #fca5a5;
+            border: 1px solid rgba(220,38,38,0.25);
+        }
+        .sb-nav a.active .material-icons { color: #f87171; }
+
+        .sb-footer { padding: 14px 10px; border-top: 1px solid rgba(255,255,255,0.07); }
+        .sb-footer a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 13px; border-radius: 9px;
+            color: rgba(255,100,100,0.75); text-decoration: none;
+            font-size: 0.875rem; font-weight: 500; transition: all 0.18s ease;
+        }
+        .sb-footer a:hover { background: rgba(255,80,80,0.1); color: #ff6b6b; }
+
+        /* ── MAIN ── */
+        .main { margin-left: 240px; padding: 30px 36px; min-height: 100vh; }
+
+        .page-title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .page-title .material-icons { color: #f87171; font-size: 28px; }
+
+        /* ── STAT CARDS ── */
+        .stat-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 20px;
+            transition: transform 0.2s ease;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-icon {
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 12px;
+        }
+        .stat-icon .material-icons { font-size: 22px; }
+        .stat-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.7px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
+        .stat-value { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+
+        .si-users  { background: rgba(99,102,241,0.2); } .si-users  .material-icons { color: #818cf8; }
+        .si-active { background: rgba(52,211,153,0.2); } .si-active .material-icons { color: #34d399; }
+        .si-exp    { background: rgba(251,191,36,0.2);  } .si-exp    .material-icons { color: #fbbf24; }
+        .si-dl     { background: rgba(239,68,68,0.2);   } .si-dl     .material-icons { color: #f87171; }
+        .si-new    { background: rgba(167,139,250,0.2); } .si-new    .material-icons { color: #a78bfa; }
+
+        /* ── CHART CARD ── */
+        .chart-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            padding: 22px;
+        }
+        .chart-title {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 14px;
+        }
+
+        /* ── TABLE ── */
+        .table-wrap {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+        .table-head-row {
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .table-head-row h6 { margin: 0; font-weight: 600; font-size: 0.95rem; }
+
+        .sort-links { display: flex; gap: 8px; }
+        .sort-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 7px;
+            color: rgba(255,255,255,0.6);
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.18s;
+        }
+        .sort-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+        .sort-btn.active-sort {
+            background: rgba(220,38,38,0.2);
+            border-color: rgba(220,38,38,0.35);
+            color: #fca5a5;
+        }
+
+        .table { margin: 0; }
+        .table thead th {
+            background: rgba(0,0,0,0.18);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-color: rgba(255,255,255,0.06);
+            padding: 11px 18px;
+        }
+        .table tbody td {
+            color: rgba(255,255,255,0.82);
+            border-color: rgba(255,255,255,0.05);
+            padding: 11px 18px;
+            vertical-align: middle;
+            font-size: 0.875rem;
+        }
+        .table tbody tr:hover td { background: rgba(255,255,255,0.03); }
+
+        .badge-id {
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.25);
+            color: #818cf8;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .status-active {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(52,211,153,0.1);
+            border: 1px solid rgba(52,211,153,0.25);
+            color: #34d399; border-radius: 20px; padding: 2px 9px;
+            font-size: 0.75rem; font-weight: 500;
+        }
+        .status-active::before {
+            content: ''; width: 6px; height: 6px;
+            border-radius: 50%; background: #34d399;
+        }
+        .status-inactive {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.35); border-radius: 20px; padding: 2px 9px;
+            font-size: 0.75rem; font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center; padding: 40px; color: rgba(255,255,255,0.3);
+        }
+
+        /* ── TOP BAR ── */
+        .top-bar {
+            position: fixed;
+            top: 18px; right: 28px; z-index: 15;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            padding: 7px 16px 7px 8px;
+            border-radius: 40px;
+        }
+        .top-bar .admin-dot {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626, #9b1c1c);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .top-bar span { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sb-brand">
+        <h4>🛡 Money Wizard</h4>
+        <span class="sb-badge">Admin Panel</span>
+    </div>
+
+    <nav class="sb-nav">
+        <div class="sb-section-label">Analytics</div>
+        <a href="{{ url_for('admin_dashboard') }}" class="active">
+            <span class="material-icons">dashboard</span>
+            Dashboard
+        </a>
+        <a href="{{ url_for('admin_dashboard', sort='most_expenses') }}">
+            <span class="material-icons">receipt_long</span>
+            Top Spenders
+        </a>
+        <a href="{{ url_for('admin_dashboard', sort='most_active') }}">
+            <span class="material-icons">bolt</span>
+            Most Active
+        </a>
+        <a href="{{ url_for('admin_dashboard', sort='newest') }}">
+            <span class="material-icons">person_add</span>
+            New Users
+        </a>
+    </nav>
+
+    <div class="sb-footer">
+        <a href="{{ url_for('admin_logout') }}">
+            <span class="material-icons">logout</span>
+            Logout
+        </a>
+    </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="admin-dot">🛡</div>
+    <span>{{ current_user.username }}</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <div class="page-title">
+        <span class="material-icons">admin_panel_settings</span>
+        Admin Dashboard
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon si-users"><span class="material-icons">group</span></div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value">{{ total_users }}</div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon si-active"><span class="material-icons">verified_user</span></div>
+                <div class="stat-label">Active (7 days)</div>
+                <div class="stat-value" style="color:#34d399;">{{ active_users }}</div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon si-exp"><span class="material-icons">receipt_long</span></div>
+                <div class="stat-label">Total Expenses</div>
+                <div class="stat-value" style="color:#fbbf24;">{{ total_expenses }}</div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon si-dl"><span class="material-icons">download</span></div>
+                <div class="stat-label">Report Downloads</div>
+                <div class="stat-value" style="color:#f87171;">{{ total_downloads }}</div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon si-new"><span class="material-icons">person_add</span></div>
+                <div class="stat-label">New This Month</div>
+                <div class="stat-value" style="color:#a78bfa;">{{ new_users_month }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="row g-3 mb-2">
+        <div class="col-md-8">
+            <div class="chart-card">
+                <div class="chart-title">User Growth – Last 6 Months</div>
+                <div style="height: 200px;">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="chart-card h-100">
+                <div class="chart-title">User Activity</div>
+                <div style="height: 200px; display:flex; align-items:center; justify-content:center;">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER TABLE -->
+    <div class="table-wrap">
+        <div class="table-head-row">
+            <h6>User Analytics</h6>
+            <div class="sort-links">
+                <a href="?sort=newest"
+                   class="sort-btn {{ 'active-sort' if sort_by == 'newest' else '' }}">Newest</a>
+                <a href="?sort=most_active"
+                   class="sort-btn {{ 'active-sort' if sort_by == 'most_active' else '' }}">Most Active</a>
+                <a href="?sort=most_expenses"
+                   class="sort-btn {{ 'active-sort' if sort_by == 'most_expenses' else '' }}">Most Expenses</a>
+            </div>
+        </div>
+
+        {% if user_stats %}
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Registered</th>
+                        <th>Last Login</th>
+                        <th>Status</th>
+                        <th>Expenses</th>
+                        <th>Downloads</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in user_stats %}
+                    {% set u = item.user %}
+                    {% set is_active = u.last_login and (now - u.last_login).days <= 7 %}
+                    <tr>
+                        <td><span class="badge-id">#{{ u.id }}</span></td>
+                        <td style="font-weight:500;">{{ u.username }}</td>
+                        <td style="color:rgba(255,255,255,0.55); font-size:0.8rem;">{{ u.email }}</td>
+                        <td style="font-size:0.8rem;">
+                            {{ u.created_at.strftime('%b %d, %Y') if u.created_at else '—' }}
+                        </td>
+                        <td style="font-size:0.8rem;">
+                            {{ u.last_login.strftime('%b %d, %Y') if u.last_login else 'Never' }}
+                        </td>
+                        <td>
+                            {% if is_active %}
+                            <span class="status-active">Active</span>
+                            {% else %}
+                            <span class="status-inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ item.expense_count }}</strong>
+                        </td>
+                        <td>
+                            {{ u.reports_downloaded or 0 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="material-icons" style="font-size:40px; display:block; margin-bottom:10px;">group_off</span>
+            No registered users yet.
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const growthLabels  = {{ monthly_labels | tojson }};
+const growthData    = {{ monthly_reg    | tojson }};
+
+new Chart(document.getElementById('growthChart'), {
+    type: 'bar',
+    data: {
+        labels: growthLabels,
+        datasets: [{
+            label: 'New Users',
+            data: growthData,
+            backgroundColor: 'rgba(167,139,250,0.5)',
+            borderColor: '#a78bfa',
+            borderWidth: 1.5,
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 11 } },
+                 grid: { display: false }, border: { color: '#333' } },
+            y: { ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 11 }, stepSize: 1 },
+                 grid: { color: 'rgba(255,255,255,0.05)' }, border: { color: '#333' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('activityChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Active (7d)', 'Inactive'],
+        datasets: [{
+            data: [{{ active_users }}, {{ inactive_users }}],
+            backgroundColor: ['rgba(52,211,153,0.7)', 'rgba(255,255,255,0.1)'],
+            borderColor: ['#34d399', 'rgba(255,255,255,0.05)'],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '68%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { color: 'rgba(255,255,255,0.5)', font: { size: 11 }, padding: 12 }
+            }
+        }
+    }
+});
+</script>
+
+
+</body>
+</html>
