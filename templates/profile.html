@@ -1,94 +1,300 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 class="text-white mb-4">👤 My Profile</h2>
+<style>
+    .profile-card {
+        max-width: 560px;
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
 
-<div class="glass-card" style="max-width:600px;">
+    .profile-header {
+        background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(79,70,229,0.2));
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 36px 32px;
+        text-align: center;
+    }
+
+    .avatar-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 14px;
+    }
+
+    .avatar-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255,255,255,0.3);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .profile-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 4px;
+    }
+
+    .profile-email {
+        font-size: 0.875rem;
+        color: rgba(255,255,255,0.5);
+    }
+
+    .profile-body {
+        padding: 28px 32px;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .info-row:last-of-type { border-bottom: none; }
+
+    .info-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(120,80,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .info-icon .material-icons {
+        font-size: 18px;
+        color: #a78bfa;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 2px;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .profile-actions {
+        padding: 0 32px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-edit {
+        background: rgba(255,255,255,0.09);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: #fff;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        width: 100%;
+    }
+
+    .btn-edit:hover {
+        background: rgba(255,255,255,0.15);
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border: none;
+        color: #fff;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+        box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+    }
+
+    .btn-save:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(124,58,237,0.5);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.15);
+        color: rgba(255,255,255,0.6);
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .btn-cancel:hover {
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+    }
+
+    .btn-delete {
+        background: rgba(239,68,68,0.12);
+        border: 1px solid rgba(239,68,68,0.3);
+        color: #fca5a5;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 100%;
+        margin-top: 4px;
+    }
+
+    .btn-delete:hover {
+        background: rgba(239,68,68,0.22);
+    }
+
+    .form-label-sm {
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .edit-input {
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        border-radius: 9px !important;
+        color: #fff !important;
+        padding: 10px 13px !important;
+        font-size: 0.9rem !important;
+        width: 100%;
+        margin-bottom: 14px;
+        transition: all 0.2s ease;
+    }
+
+    .edit-input:focus {
+        background: rgba(255,255,255,0.1) !important;
+        border-color: rgba(120,80,255,0.6) !important;
+        box-shadow: 0 0 0 3px rgba(120,80,255,0.12) !important;
+        outline: none !important;
+        color: #fff !important;
+    }
+
+    .edit-input::placeholder { color: rgba(255,255,255,0.3) !important; }
+</style>
+
+<div class="page-title">
+    <span class="material-icons" style="color:#a78bfa;">manage_accounts</span>
+    My Profile
+</div>
+
+<div class="profile-card">
 
     <!-- VIEW MODE -->
     <div id="viewMode">
-
-        <div class="text-center mb-4">
-            <img 
-                class="profile-avatar"
-                    src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
-                alt="Profile Picture">
+        <div class="profile-header">
+            <div class="avatar-wrap">
+                <img class="avatar-img"
+                     src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ current_user.username }}&background=7c3aed&color=fff&size=200'"
+                     alt="Profile Picture">
+            </div>
+            <div class="profile-name">{{ current_user.username }}</div>
+            <div class="profile-email">{{ current_user.email }}</div>
         </div>
 
-        <div class="mb-3 text-white">
-            <strong>Name:</strong><br>
-            {{ current_user.username }}
+        <div class="profile-body">
+            <div class="info-row">
+                <div class="info-icon">
+                    <span class="material-icons">person</span>
+                </div>
+                <div>
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ current_user.username }}</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon">
+                    <span class="material-icons">mail</span>
+                </div>
+                <div>
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ current_user.email }}</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon">
+                    <span class="material-icons">account_balance_wallet</span>
+                </div>
+                <div>
+                    <div class="info-label">Monthly Budget</div>
+                    <div class="info-value">₹{{ "{:,.2f}".format(current_user.budget) }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3 text-white">
-            <strong>Email:</strong><br>
-            {{ current_user.email }}
+        <div class="profile-actions">
+            <button class="btn-edit" onclick="toggleEdit(true)">✏ Edit Profile</button>
         </div>
-
-        <div class="mb-3 text-white">
-            <strong>Monthly Budget:</strong><br>
-            {{ "{:,.2f}".format(current_user.budget) }}
-        </div>
-
-        <button class="btn btn-light w-100 mb-3"
-                onclick="toggleEdit(true)">
-            ✏ Edit Profile
-        </button>
-
     </div>
 
     <!-- EDIT MODE -->
     <div id="editMode" style="display:none;">
+        <div class="profile-header" style="padding:24px 32px;">
+            <div class="profile-name">Edit Profile</div>
+        </div>
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" style="padding:24px 32px 0;">
+            <label class="form-label-sm">Username</label>
+            <input type="text" name="username" value="{{ current_user.username }}"
+                   class="form-control edit-input">
 
-            <div class="mb-3">
-                <label class="text-white">Username</label>
-                <input type="text"
-                       name="username"
-                       value="{{ current_user.username }}"
-                       class="form-control">
+            <label class="form-label-sm">Monthly Budget (₹)</label>
+            <input type="number" name="budget" value="{{ current_user.budget }}"
+                   class="form-control edit-input" step="0.01">
+
+            <label class="form-label-sm">New Password</label>
+            <input type="password" name="password"
+                   class="form-control edit-input"
+                   placeholder="Leave blank to keep current" autocomplete="new-password">
+
+            <label class="form-label-sm">Profile Picture</label>
+            <input type="file" name="profile_pic"
+                   class="form-control edit-input" accept="image/*">
+
+            <div style="padding-bottom:24px; display:flex; flex-direction:column; gap:10px;">
+                <button type="submit" class="btn-save">Save Changes</button>
+                <button type="button" class="btn-cancel" onclick="toggleEdit(false)">Cancel</button>
             </div>
-
-            <div class="mb-3">
-                <label class="text-white">Monthly Budget</label>
-                <input type="number"
-                       name="budget"
-                       value="{{ current_user.budget }}"
-                       class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="text-white">New Password</label>
-                <input type="password"
-                       name="password"
-                       class="form-control"
-                       placeholder="Leave blank to keep current password">
-            </div>
-
-            <div class="mb-3">
-                <label class="text-white">Profile Picture</label>
-                <input type="file"
-                       name="profile_pic"
-                       class="form-control">
-            </div>
-
-            <button class="btn btn-success w-100 mb-2">
-                💾 Save Changes
-            </button>
-
         </form>
-
-        <button class="btn btn-secondary w-100 mb-3"
-                onclick="toggleEdit(false)">
-            Cancel
-        </button>
-
     </div>
 
-    <form method="POST" action="{{ url_for('request_delete_account') }}">
-        <button class="delete-btn">Delete Account</button>
-    </form>
+    <!-- DELETE -->
+    <div style="padding:0 32px 28px;">
+        <form method="POST" action="{{ url_for('request_delete_account') }}"
+              onsubmit="return confirm('This will permanently delete your account. Are you sure?')">
+            <button type="submit" class="btn-delete">Delete Account</button>
+        </form>
+    </div>
 
 </div>
 

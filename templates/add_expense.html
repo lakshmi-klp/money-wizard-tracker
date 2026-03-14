@@ -1,345 +1,239 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 class="text-danger mb-4">Add Expense</h2>
+<style>
+    .amount-wrap {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        max-width: 420px;
+    }
 
-<form method="POST">
+    .amount-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 10px;
+        display: block;
+    }
 
-<!-- Amount -->
-<input type="number" step="0.01" name="amount" class="form-control mb-4" placeholder="Amount" required>
+    .amount-input {
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        border-radius: 10px !important;
+        color: #fff !important;
+        padding: 14px 16px !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
 
-<h5 class="text-white mb-3">Select Category</h5>
+    .amount-input::placeholder { color: rgba(255,255,255,0.25) !important; }
+    .amount-input:focus {
+        background: rgba(255,255,255,0.1) !important;
+        border-color: rgba(120,80,255,0.6) !important;
+        box-shadow: 0 0 0 3px rgba(120,80,255,0.15) !important;
+        outline: none !important;
+    }
 
-<div class="category-grid">
+    .section-heading {
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: rgba(255,255,255,0.45);
+        margin-bottom: 16px;
+    }
 
-<!-- 1 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Food" required>
-<span class="material-icons">restaurant</span>
-<p>Food</p>
-</label>
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 12px;
+        margin-bottom: 28px;
+    }
 
-<!-- 2 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Groceries">
-<span class="material-icons">shopping_basket</span>
-<p>Groceries</p>
-</label>
+    .cat-item {
+        position: relative;
+        text-align: center;
+        padding: 16px 8px 12px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.1);
+        cursor: pointer;
+        transition: all 0.18s ease;
+        user-select: none;
+    }
 
-<!-- 3 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Shopping">
-<span class="material-icons">shopping_cart</span>
-<p>Shopping</p>
-</label>
+    .cat-item input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-<!-- 4 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Travel">
-<span class="material-icons">flight</span>
-<p>Travel</p>
-</label>
+    .cat-item .material-icons {
+        font-size: 28px;
+        color: rgba(255,255,255,0.65);
+        display: block;
+        margin-bottom: 6px;
+        transition: all 0.18s ease;
+    }
 
-<!-- 5 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Fuel">
-<span class="material-icons">local_gas_station</span>
-<p>Fuel</p>
-</label>
+    .cat-item p {
+        color: rgba(255,255,255,0.55);
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin: 0;
+        transition: color 0.18s ease;
+    }
 
-<!-- 6 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Transport">
-<span class="material-icons">directions_bus</span>
-<p>Transport</p>
-</label>
+    .cat-item:hover {
+        background: rgba(255,255,255,0.13);
+        border-color: rgba(255,255,255,0.22);
+        transform: translateY(-2px);
+    }
 
-<!-- 7 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Car">
-<span class="material-icons">directions_car</span>
-<p>Car</p>
-</label>
+    .cat-item:hover .material-icons { color: rgba(255,255,255,0.9); }
+    .cat-item:hover p { color: rgba(255,255,255,0.8); }
 
-<!-- 8 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Education">
-<span class="material-icons">school</span>
-<p>Education</p>
-</label>
+    .cat-item.selected {
+        background: rgba(124,58,237,0.25);
+        border-color: rgba(124,58,237,0.6);
+        box-shadow: 0 0 0 2px rgba(124,58,237,0.3);
+        transform: translateY(-2px);
+    }
 
-<!-- 9 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Books">
-<span class="material-icons">menu_book</span>
-<p>Books</p>
-</label>
+    .cat-item.selected .material-icons {
+        color: #a78bfa;
+    }
 
-<!-- 10 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Gym">
-<span class="material-icons">fitness_center</span>
-<p>Gym</p>
-</label>
+    .cat-item.selected p {
+        color: #c4b5fd;
+        font-weight: 600;
+    }
 
-<!-- 11 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Health">
-<span class="material-icons">health_and_safety</span>
-<p>Health</p>
-</label>
+    .submit-btn {
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border: none;
+        border-radius: 12px;
+        padding: 14px 32px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+        width: 100%;
+        max-width: 420px;
+        display: block;
+    }
 
-<!-- 12 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Medicine">
-<span class="material-icons">medical_services</span>
-<p>Medicine</p>
-</label>
+    .submit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124,58,237,0.55);
+    }
 
-<!-- 13 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Clothing">
-<span class="material-icons">checkroom</span>
-<p>Clothing</p>
-</label>
+    .submit-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+</style>
 
-<!-- 14 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Beauty">
-<span class="material-icons">face</span>
-<p>Beauty</p>
-</label>
-
-<!-- 15 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Entertainment">
-<span class="material-icons">movie</span>
-<p>Entertainment</p>
-</label>
-
-<!-- 16 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Music">
-<span class="material-icons">music_note</span>
-<p>Music</p>
-</label>
-
-<!-- 17 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Games">
-<span class="material-icons">sports_esports</span>
-<p>Games</p>
-</label>
-
-<!-- 18 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Mobile">
-<span class="material-icons">smartphone</span>
-<p>Mobile</p>
-</label>
-
-<!-- 19 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Internet">
-<span class="material-icons">wifi</span>
-<p>Internet</p>
-</label>
-
-<!-- 20 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Electricity">
-<span class="material-icons">bolt</span>
-<p>Electricity</p>
-</label>
-
-<!-- 21 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Water">
-<span class="material-icons">water_drop</span>
-<p>Water</p>
-</label>
-
-<!-- 22 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Rent">
-<span class="material-icons">home</span>
-<p>Rent</p>
-</label>
-
-<!-- 23 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Home">
-<span class="material-icons">house</span>
-<p>Home</p>
-</label>
-
-<!-- 24 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Furniture">
-<span class="material-icons">weekend</span>
-<p>Furniture</p>
-</label>
-
-<!-- 25 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Repair">
-<span class="material-icons">build</span>
-<p>Repair</p>
-</label>
-
-<!-- 26 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Pet">
-<span class="material-icons">pets</span>
-<p>Pet</p>
-</label>
-
-<!-- 27 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Kids">
-<span class="material-icons">child_care</span>
-<p>Kids</p>
-</label>
-
-<!-- 28 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Gift">
-<span class="material-icons">card_giftcard</span>
-<p>Gift</p>
-</label>
-
-<!-- 29 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Charity">
-<span class="material-icons">volunteer_activism</span>
-<p>Charity</p>
-</label>
-
-<!-- 30 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Investment">
-<span class="material-icons">trending_up</span>
-<p>Investment</p>
-</label>
-
-<!-- 31 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Savings">
-<span class="material-icons">savings</span>
-<p>Savings</p>
-</label>
-
-<!-- 32 -->
-<label class="cat-item">
-<input type="radio" name="category" value="EMI">
-<span class="material-icons">account_balance</span>
-<p>EMI</p>
-</label>
-
-<!-- 33 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Bank">
-<span class="material-icons">account_balance_wallet</span>
-<p>Bank</p>
-</label>
-
-<!-- 34 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Taxes">
-<span class="material-icons">receipt_long</span>
-<p>Taxes</p>
-</label>
-
-<!-- 35 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Insurance">
-<span class="material-icons">security</span>
-<p>Insurance</p>
-</label>
-
-<!-- 36 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Snacks">
-<span class="material-icons">fastfood</span>
-<p>Snacks</p>
-</label>
-
-<!-- 37 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Coffee">
-<span class="material-icons">coffee</span>
-<p>Coffee</p>
-</label>
-
-<!-- 38 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Alcohol">
-<span class="material-icons">wine_bar</span>
-<p>Alcohol</p>
-</label>
-
-<!-- 39 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Lottery">
-<span class="material-icons">casino</span>
-<p>Lottery</p>
-</label>
-
-<!-- 40 -->
-<label class="cat-item">
-<input type="radio" name="category" value="Other">
-<span class="material-icons">category</span>
-<p>Other</p>
-</label>
-
+<div class="page-title">
+    <span class="material-icons" style="color:#f87171;">add_circle</span>
+    Add Expense
 </div>
 
-<button class="btn btn-danger w-100 mt-4">Add Expense</button>
+<form method="POST" id="expenseForm">
+
+    <div class="amount-wrap">
+        <label class="amount-label">Amount</label>
+        <input type="number" step="0.01" min="0.01" name="amount" id="amountInput"
+               class="form-control amount-input" placeholder="₹ 0.00" required
+               oninput="updateBtn()">
+    </div>
+
+    <div class="section-heading">Select Category</div>
+
+    <div class="category-grid">
+
+        {% set categories = [
+            ("Food", "restaurant"),
+            ("Groceries", "shopping_basket"),
+            ("Shopping", "shopping_cart"),
+            ("Travel", "flight"),
+            ("Fuel", "local_gas_station"),
+            ("Transport", "directions_bus"),
+            ("Car", "directions_car"),
+            ("Education", "school"),
+            ("Books", "menu_book"),
+            ("Gym", "fitness_center"),
+            ("Health", "health_and_safety"),
+            ("Medicine", "medical_services"),
+            ("Clothing", "checkroom"),
+            ("Beauty", "face"),
+            ("Entertainment", "movie"),
+            ("Music", "music_note"),
+            ("Games", "sports_esports"),
+            ("Mobile", "smartphone"),
+            ("Internet", "wifi"),
+            ("Electricity", "bolt"),
+            ("Water", "water_drop"),
+            ("Rent", "home"),
+            ("Home", "house"),
+            ("Furniture", "weekend"),
+            ("Repair", "build"),
+            ("Pet", "pets"),
+            ("Kids", "child_care"),
+            ("Gift", "card_giftcard"),
+            ("Charity", "volunteer_activism"),
+            ("Investment", "trending_up"),
+            ("Savings", "savings"),
+            ("EMI", "account_balance"),
+            ("Bank", "account_balance_wallet"),
+            ("Taxes", "receipt_long"),
+            ("Insurance", "security"),
+            ("Snacks", "fastfood"),
+            ("Coffee", "coffee"),
+            ("Alcohol", "wine_bar"),
+            ("Lottery", "casino"),
+            ("Other", "category")
+        ] %}
+
+        {% for name, icon in categories %}
+        <label class="cat-item" onclick="selectCat(this)">
+            <input type="radio" name="category" value="{{ name }}" required>
+            <span class="material-icons">{{ icon }}</span>
+            <p>{{ name }}</p>
+        </label>
+        {% endfor %}
+
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+        Add Expense
+    </button>
 
 </form>
 
-<style>
-
-.category-grid{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:18px;
+<script>
+function selectCat(el) {
+    document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    updateBtn();
 }
 
-.cat-item{
-text-align:center;
-padding:14px;
-border-radius:12px;
-background:rgba(255,255,255,0.1);
-cursor:pointer;
-transition:0.3s;
+function updateBtn() {
+    const amount = document.getElementById('amountInput').value;
+    const cat = document.querySelector('input[name="category"]:checked');
+    document.getElementById('submitBtn').disabled = !(amount && cat);
 }
-
-.cat-item input{
-display:none;
-}
-
-.cat-item .material-icons{
-font-size:36px;
-color:white;
-display:block;
-margin-bottom:5px;
-}
-
-.cat-item p{
-color:white;
-font-size:13px;
-}
-
-.cat-item:hover{
-background:rgba(255,255,255,0.25);
-transform:scale(1.05);
-}
-
-.cat-item input:checked + .material-icons{
-color:#ff4d4d;
-}
-
-</style>
+</script>
 
 {% endblock %}

@@ -3,24 +3,23 @@
 <head>
     <title>Money Wizard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- YOUR CSS FILE -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             background: transparent !important;
             overflow-x: hidden;
+            color: #fff;
         }
 
-        /* VIDEO BACKGROUND */
+        /* ── VIDEO / GRADIENT BACKGROUND ── */
         #bgVideo {
             position: fixed;
             inset: 0;
@@ -33,188 +32,307 @@
 
         @keyframes slowZoom {
             from { transform: scale(1); }
-            to { transform: scale(1.1); }
+            to   { transform: scale(1.08); }
+        }
+
+        .bg-gradient-fallback {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(135deg,
+                #0f0c29 0%,
+                #302b63 40%,
+                #24243e 100%);
+            animation: gradientShift 12s ease infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
         .overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,35);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 1;
         }
 
-        /* SIDEBAR */
+        /* ── SIDEBAR ── */
         .sidebar {
-            width: 230px;
+            width: 240px;
             height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
-            padding-top: 30px;
+            background: rgba(15, 12, 41, 0.75);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            padding: 0;
             color: white;
-            z-index: 3;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
         }
 
-        .sidebar h4 {
-            text-align: center;
-            margin-bottom: 30px;
+        .sidebar-brand {
+            padding: 28px 24px 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand .brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: rgba(255,255,255,0.35);
+            padding: 8px 12px 4px;
         }
 
         .sidebar a {
-            display: block;
-            padding: 12px 25px;
-            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: rgba(255,255,255,0.75);
             text-decoration: none;
-            transition: 0.3s;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar a .material-icons {
+            font-size: 20px;
+            opacity: 0.8;
         }
 
         .sidebar a:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateX(5px);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transform: translateX(3px);
         }
 
-        /* MAIN CONTENT */
+        .sidebar a:hover .material-icons {
+            opacity: 1;
+        }
+
+        .sidebar a.active {
+            background: linear-gradient(90deg, rgba(120,80,255,0.4), rgba(80,120,255,0.2));
+            color: #fff;
+            border: 1px solid rgba(120,80,255,0.3);
+        }
+
+        .sidebar a.active .material-icons {
+            opacity: 1;
+            color: #a78bfa;
+        }
+
+        .sidebar-footer {
+            padding: 16px 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: rgba(255,100,100,0.8);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-footer a:hover {
+            background: rgba(255,80,80,0.12);
+            color: #ff6b6b;
+        }
+
+        /* ── MAIN CONTENT ── */
         .main-content {
-            margin-left: 230px;
-            padding: 30px;
+            margin-left: 240px;
+            padding: 32px 36px;
             position: relative;
             z-index: 2;
+            min-height: 100vh;
         }
 
-        /* TOP RIGHT PROFILE */
+        .no-sidebar .main-content {
+            margin-left: 0;
+        }
+
+        /* ── TOP PROFILE ── */
         .top-profile {
             position: fixed;
-            top: 20px;
-            right: 30px;
-            z-index: 5;
+            top: 18px;
+            right: 28px;
+            z-index: 15;
             display: flex;
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 6px 14px 6px 6px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .top-profile:hover {
+            background: rgba(255,255,255,0.15);
         }
 
         .top-profile img {
-            width: 45px;
-            height: 45px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid white;
+            border: 2px solid rgba(255,255,255,0.4);
         }
 
         .top-profile span {
             color: white;
             font-weight: 500;
+            font-size: 0.88rem;
         }
 
-        /* GLASS CARD */
+        /* ── GLASS CARD ── */
         .glass-card {
-            background: rgba(255,255,255,0.18);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            padding: 25px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 28px;
             color: white;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-}
-        /* FLOATING BACK BUTTON */
-        .back-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            z-index: 5;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
+        /* ── PAGE TITLE ── */
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            .sidebar { width: 180px; }
-            .main-content { margin-left: 180px; }
+            .sidebar { width: 200px; }
+            .main-content { margin-left: 200px; padding: 20px; }
         }
-
     </style>
 </head>
 
-<body>
+<body class="{{ 'no-sidebar' if not current_user.is_authenticated else '' }}">
 
-<!-- VIDEO BACKGROUND -->
-<video autoplay muted loop playsinline id="bgVideo">
+<!-- BACKGROUND -->
+<div class="bg-gradient-fallback"></div>
+<video autoplay muted loop playsinline id="bgVideo"
+       onerror="this.style.display='none'"
+       oncanplay="this.style.opacity='1'"
+       style="opacity:0;transition:opacity 1s;">
     <source src="{{ url_for('static', filename='videos/main.mp4') }}" type="video/mp4">
 </video>
-
 <div class="overlay"></div>
 
+{% if current_user.is_authenticated %}
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <h4>🧙 Money Wizard</h4>
+    <div class="sidebar-brand">
+        <span class="brand-icon">🧙</span>
+        Money Wizard
+    </div>
 
-    <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+    <nav class="sidebar-nav">
+        <div class="sidebar-label">Main</div>
+        <a href="{{ url_for('dashboard') }}"
+           class="{{ 'active' if request.endpoint == 'dashboard' else '' }}">
+            <span class="material-icons">dashboard</span>
+            Dashboard
+        </a>
+        <a href="{{ url_for('add_expense') }}"
+           class="{{ 'active' if request.endpoint == 'add_expense' else '' }}">
+            <span class="material-icons">add_circle</span>
+            Add Expense
+        </a>
 
-    <a href="{{ url_for('add_expense') }}">➕ Add Expense</a>
+        <div class="sidebar-label" style="margin-top:8px;">Account</div>
+        <a href="{{ url_for('profile') }}"
+           class="{{ 'active' if request.endpoint == 'profile' else '' }}">
+            <span class="material-icons">manage_accounts</span>
+            Profile
+        </a>
+        <a href="{{ url_for('download_pdf') }}">
+            <span class="material-icons">picture_as_pdf</span>
+            Download Report
+        </a>
+    </nav>
 
-    <a href="{{ url_for('logout') }}">🚪 Logout</a>
-
+    <div class="sidebar-footer">
+        <a href="{{ url_for('logout') }}">
+            <span class="material-icons">logout</span>
+            Logout
+        </a>
+    </div>
 </div>
 
-<!-- TOP RIGHT PROFILE -->
-{% if current_user.is_authenticated %}
-
-<div class="top-profile"
-onclick="window.location='{{ url_for('profile') }}'">
-
-<img
-src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}">
-
-<span>{{ current_user.username }}</span>
-
+<!-- TOP PROFILE PILL -->
+<div class="top-profile" onclick="window.location='{{ url_for('profile') }}'">
+    <img src="{{ url_for('static', filename='profile_pics/' + current_user.profile_pic) }}"
+         onerror="this.src='https://ui-avatars.com/api/?name={{ current_user.username }}&background=7c3aed&color=fff&size=80'">
+    <span>{{ current_user.username }}</span>
 </div>
-
 {% endif %}
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
-
-{% block content %}{% endblock %}
-
+    {% block content %}{% endblock %}
 </div>
 
-<!-- BACK BUTTON -->
-<button class="btn btn-light back-btn" onclick="history.back()">
-⬅ Back
-</button>
-
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-
+document.addEventListener("DOMContentLoaded", function () {
     const video = document.getElementById("bgVideo");
-
     const path = window.location.pathname;
 
-    if(path.includes("dashboard")){
-
+    if (path.includes("dashboard")) {
         let month = Number("{{ selected_month | default(0) }}");
-
-        if(month === 12 || month === 1 || month === 2){
+        if (month === 12 || month === 1 || month === 2) {
             video.src = "/static/videos/winter.mp4";
-        }
-
-        else if(month >= 3 && month <= 5){
+        } else if (month >= 3 && month <= 5) {
             video.src = "/static/videos/summer.mp4";
-        }
-
-        else if(month >= 6 && month <= 9){
+        } else if (month >= 6 && month <= 9) {
             video.src = "/static/videos/rainy.mp4";
         }
-
-        else{
-            video.src = "/static/videos/main.mp4";
-        }
-
         video.load();
-
     }
-
 });
-
 </script>
 
 </body>

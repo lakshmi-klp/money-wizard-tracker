@@ -1,36 +1,178 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3 class="text-white mb-3">Register</h3>
+<style>
+    .auth-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-<div class="glass-card" style="max-width:400px;">
+    .auth-card {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 20px;
+        padding: 40px 36px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
 
-<form method="POST">
-    <input name="username" class="form-control mb-2" placeholder="Username" required>
-    <input name="email" type="email" class="form-control mb-2" placeholder="Email" required>
-    <input name="password" type="password" class="form-control mb-2" placeholder="Password" required>
-    <button class="btn btn-primary w-100">Register</button>
-</form>
+    .auth-logo {
+        text-align: center;
+        margin-bottom: 28px;
+    }
 
-{% if error %}
-    <div class="mt-3 text-danger">
-        {{ error }}
+    .auth-logo .logo-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .auth-logo h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 4px;
+    }
+
+    .auth-logo p {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    .form-label-sm {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .auth-input {
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        border-radius: 10px !important;
+        color: #fff !important;
+        padding: 12px 14px !important;
+        font-size: 0.95rem !important;
+        transition: all 0.2s ease;
+    }
+
+    .auth-input::placeholder { color: rgba(255,255,255,0.35) !important; }
+    .auth-input:focus {
+        background: rgba(255,255,255,0.1) !important;
+        border-color: rgba(120,80,255,0.6) !important;
+        box-shadow: 0 0 0 3px rgba(120,80,255,0.15) !important;
+        outline: none !important;
+        color: #fff !important;
+    }
+
+    .btn-auth {
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #fff;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+        margin-top: 4px;
+    }
+
+    .btn-auth:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124,58,237,0.55);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.875rem;
+    }
+
+    .auth-footer a {
+        color: #a78bfa;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .auth-footer a:hover { color: #c4b5fd; text-decoration: underline; }
+
+    .divider {
+        border: none;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        margin: 24px 0;
+    }
+
+    .alert-error {
+        background: rgba(255,80,80,0.15);
+        border: 1px solid rgba(255,80,80,0.3);
+        border-radius: 10px;
+        color: #fca5a5;
+        padding: 10px 14px;
+        font-size: 0.875rem;
+        margin-top: 14px;
+    }
+</style>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <span class="logo-icon">🧙</span>
+            <h2>Create Account</h2>
+            <p>Start tracking your finances today</p>
+        </div>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label-sm">Username</label>
+                <input name="username" class="form-control auth-input"
+                       placeholder="Choose a username" autocomplete="username" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label-sm">Email</label>
+                <input name="email" type="email" class="form-control auth-input"
+                       placeholder="Your email address" autocomplete="email" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label-sm">Password</label>
+                <input name="password" type="password" class="form-control auth-input"
+                       placeholder="Create a strong password" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn-auth">Create Account</button>
+        </form>
+
+        {% if error %}
+        <div class="alert-error">{{ error }}</div>
+        {% endif %}
+
+        {% if show_login %}
+        <div class="mt-3 text-center">
+            <a href="{{ url_for('login') }}" class="btn-auth" style="display:inline-block; text-decoration:none;">
+                Sign In Instead
+            </a>
+        </div>
+        {% endif %}
+
+        <hr class="divider">
+
+        <p class="auth-footer">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Sign in</a>
+        </p>
     </div>
-{% endif %}
-
-{% if show_login %}
-    <div class="mt-2">
-        <a href="{{ url_for('login') }}" class="btn btn-success w-100">
-            🔐 Go to Login
-        </a>
-    </div>
-{% endif %}
-
-<div class="mt-3 text-white">
-    Already have account?
-    <a href="{{ url_for('login') }}">Login</a>
-</div>
-
 </div>
 
 {% endblock %}

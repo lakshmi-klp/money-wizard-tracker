@@ -1,28 +1,101 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<div class="container" style="max-width:500px;margin:auto;text-align:center">
+<style>
+    .auth-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-<h2>Email Verification</h2>
+    .auth-card {
+        width: 100%;
+        max-width: 400px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 20px;
+        padding: 40px 36px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        text-align: center;
+    }
 
-<p>A verification code has been sent to your email.</p>
+    .verify-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 16px;
+    }
 
-<form method="POST">
+    .auth-card h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+    }
 
-<input type="text"
-       name="otp"
-       placeholder="Enter OTP"
-       required
-       style="padding:10px;width:100%;margin-top:15px">
+    .auth-card p {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.875rem;
+        margin-bottom: 24px;
+    }
 
-<button type="submit"
-        style="margin-top:15px;padding:10px 20px">
-        Verify Email
-</button>
+    .otp-input {
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        border-radius: 10px !important;
+        color: #fff !important;
+        font-size: 1.6rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        letter-spacing: 8px !important;
+        padding: 14px !important;
+        width: 100%;
+        margin-bottom: 18px;
+    }
 
-</form>
+    .otp-input:focus {
+        background: rgba(255,255,255,0.1) !important;
+        border-color: rgba(120,80,255,0.6) !important;
+        box-shadow: 0 0 0 3px rgba(120,80,255,0.15) !important;
+        outline: none !important;
+    }
 
+    .btn-verify {
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #fff;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+    }
+
+    .btn-verify:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124,58,237,0.55);
+    }
+</style>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <span class="verify-icon">📧</span>
+        <h2>Verify Your Email</h2>
+        <p>A 6-digit verification code has been sent to<br><strong style="color:rgba(255,255,255,0.75);">{{ email }}</strong></p>
+
+        <form method="POST">
+            <input type="text" name="otp" placeholder="000000"
+                   class="form-control otp-input"
+                   maxlength="6" pattern="\d{6}" required
+                   autocomplete="one-time-code">
+            <button type="submit" class="btn-verify">Verify Email</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

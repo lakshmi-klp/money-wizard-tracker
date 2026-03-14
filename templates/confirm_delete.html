@@ -1,70 +1,101 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-<div class="delete-container">
-
-<div class="delete-card">
-
-<h1>Verify Account Deletion</h1>
-
-<p>Enter the verification code sent to your email.</p>
-
-<form method="POST">
-
-<input 
-type="text" 
-name="otp" 
-placeholder="Enter OTP"
-class="form-control otp-input"
-required
->
-
-<button class="btn btn-danger mt-3">
-Confirm Delete
-</button>
-
-</form>
-
-</div>
-
-</div>
-
 <style>
+    .centered-wrap {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-.delete-container{
-height:80vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+    .confirm-card {
+        width: 100%;
+        max-width: 400px;
+        background: rgba(239,68,68,0.08);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(239,68,68,0.25);
+        border-radius: 20px;
+        padding: 40px 36px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        text-align: center;
+    }
 
-.delete-card{
-background:rgba(0,0,0,0.6);
-padding:40px;
-border-radius:15px;
-text-align:center;
-backdrop-filter:blur(10px);
-color:white;
-width:420px;
-}
+    .warn-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 16px;
+    }
 
-.delete-card h1{
-font-size:32px;
-margin-bottom:10px;
-}
+    .confirm-card h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #fca5a5;
+        margin-bottom: 8px;
+    }
 
-.delete-card p{
-font-size:18px;
-margin-bottom:20px;
-color:#ddd;
-}
+    .confirm-card p {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.875rem;
+        margin-bottom: 24px;
+    }
 
-.otp-input{
-text-align:center;
-font-size:18px;
-}
+    .otp-input {
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(239,68,68,0.3) !important;
+        border-radius: 10px !important;
+        color: #fff !important;
+        font-size: 1.6rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        letter-spacing: 8px !important;
+        padding: 14px !important;
+        width: 100%;
+        margin-bottom: 18px;
+    }
 
+    .otp-input:focus {
+        background: rgba(255,255,255,0.1) !important;
+        border-color: rgba(239,68,68,0.6) !important;
+        box-shadow: 0 0 0 3px rgba(239,68,68,0.15) !important;
+        outline: none !important;
+    }
+
+    .btn-confirm-delete {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #fff;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(239,68,68,0.3);
+    }
+
+    .btn-confirm-delete:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(239,68,68,0.45);
+    }
 </style>
+
+<div class="centered-wrap">
+    <div class="confirm-card">
+        <span class="warn-icon">⚠️</span>
+        <h2>Confirm Deletion</h2>
+        <p>Enter the verification code sent to your email to permanently delete your account. This cannot be undone.</p>
+
+        <form method="POST">
+            <input type="text" name="otp" placeholder="000000"
+                   class="form-control otp-input"
+                   maxlength="6" pattern="\d{6}" required
+                   autocomplete="one-time-code">
+            <button type="submit" class="btn-confirm-delete">Delete My Account</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
