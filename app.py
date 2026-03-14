@@ -448,13 +448,14 @@ def register():
         db.session.commit()
 
         otp = random.randint(100000, 999999)
-        otp_store[email] = otp
+        otp_store[email] = {"otp": otp, "expires": datetime.utcnow() + timedelta(minutes=10)}
 
         try:
             msg = Message(subject="Money Wizard – Email Verification",
                           recipients=[email])
             msg.body = (f"Hello {username},\n\n"
                         f"Your verification code is: {otp}\n\n"
+                        f"This code is valid for 10 minutes. Do not share it with anyone.\n\n"
                         f"– Money Wizard Team")
             mail.send(msg)
         except Exception as e:
@@ -472,13 +473,19 @@ def register():
 def verify_email(email):
     if request.method == 'POST':
         user_otp = request.form.get('otp')
-        stored = otp_store.get(email)
-        if stored and str(stored) == user_otp:
-            otp_store.pop(email, None)
-            flash('Email verified! You can now log in.', 'success')
-            return redirect(url_for('login'))
+        entry = otp_store.get(email)
+        if entry:
+            if datetime.utcnow() > entry["expires"]:
+                otp_store.pop(email, None)
+                flash('Your code has expired. Please register again to get a new one.', 'error')
+            elif str(entry["otp"]) == user_otp:
+                otp_store.pop(email, None)
+                flash('Email verified! You can now log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Invalid code. Please try again.', 'error')
         else:
-            flash('Invalid code. Please try again.', 'error')
+            flash('No verification code found. Please register again.', 'error')
 
     return render_template("verify_email.html", email=email)
 
@@ -583,13 +590,14 @@ def profile():
 def request_delete_account():
     email = current_user.email
     otp = random.randint(100000, 999999)
-    otp_store[email] = otp
+    otp_store[email] = {"otp": otp, "expires": datetime.utcnow() + timedelta(minutes=10)}
 
     try:
         msg = Message(subject="Money Wizard – Account Deletion Verification",
                       recipients=[email])
         msg.body = (f"Hello {current_user.username},\n\n"
                     f"Verification Code: {otp}\n\n"
+                    f"This code is valid for 10 minutes.\n\n"
                     f"If you did not request this, ignore this email.\n\n"
                     f"– Money Wizard Security Team")
         mail.send(msg)
@@ -609,17 +617,23 @@ def request_delete_account():
 @login_required
 def confirm_delete_account():
     if request.method == 'POST':
-        stored = otp_store.get(current_user.email)
-        if stored and str(stored) == request.form.get("otp"):
-            otp_store.pop(current_user.email, None)
-            user_id = current_user.id
-            Expense.query.filter_by(user_id=user_id).delete()
-            User.query.filter_by(id=user_id).delete()
-            db.session.commit()
-            logout_user()
-            return redirect(url_for('register'))
+        entry = otp_store.get(current_user.email)
+        if entry:
+            if datetime.utcnow() > entry["expires"]:
+                otp_store.pop(current_user.email, None)
+                flash('Your code has expired. Please request a new one.', 'error')
+            elif str(entry["otp"]) == request.form.get("otp"):
+                otp_store.pop(current_user.email, None)
+                user_id = current_user.id
+                Expense.query.filter_by(user_id=user_id).delete()
+                User.query.filter_by(id=user_id).delete()
+                db.session.commit()
+                logout_user()
+                return redirect(url_for('register'))
+            else:
+                flash('Invalid verification code.', 'error')
         else:
-            flash('Invalid verification code.', 'error')
+            flash('No verification code found. Please request a new one.', 'error')
 
     return render_template("confirm_delete.html")
 
