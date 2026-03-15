@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "Uv5B5-mIzCPGswUtVUyDF"
+uri = "file://static/icons/icon-512.png"
+type = "image"
+title = "Money Wizard App Icon (512×512)"
